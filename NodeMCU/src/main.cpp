@@ -16,6 +16,7 @@
 // ===================================================================================================
 #include <Arduino.h>
 #include <FirebaseESP8266.h>
+#include <Ticker.h>
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <NTPClient.h>
@@ -28,9 +29,9 @@
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
-
+Ticker tick;
 // Define yang mau diambil
-String tanggal, statusnya, ambilstatus;
+String tanggal, statusnya, ambilstatus, log_tanggal, log_jam;
 double tinggi, debit, jedawaktu, hujan, tinggipipa, lebar, panjang, jarak, status1, status2, status3;
 int rain;
 long duration, _delay = 5;
@@ -42,6 +43,7 @@ String hujan2;
 FirebaseData firebaseData;
 
 void ICACHE_RAM_ATTR rainGaugeSensor(void);
+void ICACHE_RAM_ATTR dataHujan(void);
 
 void getSettings()
 {
@@ -64,6 +66,7 @@ void getSettings()
     status3 = output["status3"];
     tinggipipa = output["tinggipipa"];
     _delay = output["delay"];
+    _delay = _delay * 1000;
     Serial.println("Tes setting :\ntinggi pipa => " + (String)tinggipipa + "\nlebar => " + (String)lebar);
   }
 }
@@ -92,12 +95,12 @@ void setup()
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
   pinMode(echoPin, INPUT);  // Sets the echoPin as an Input
   pinMode(rainPin, INPUT_PULLUP);
-
   attachInterrupt(digitalPinToInterrupt(rainPin), rainGaugeSensor, FALLING);
   firebaseSetup();
   getSettings();
   timeClient.begin();
   timeClient.setTimeOffset(25200); // Set Timezone indonesian WIB
+  // tick.attach(1,dataHujan);
 }
 
 void loop()
@@ -149,13 +152,13 @@ void loop()
   //----------------------------- Hitung Debit--------------------------------------------------------------------------
   panjang = panjang / 10; // jadiin desimeter(dm)
   lebar = lebar / 10;
-  tinggi = tinggi / 10;
+  tinggi = tinggi;
   jedawaktu = jedawaktu * 60; //dari menit jadiin jam
-  debit = panjang * lebar * tinggi / jedawaktu;
-  String log_tanggal = String(currentYear) + "-" + tanggal + "-" + String(monthDay);
-  String log_jam = formattedTime;
+  debit = panjang * lebar * tinggi / 10;
+  log_tanggal = String(currentYear) + "-" + tanggal + "-" + String(monthDay);
+  log_jam = formattedTime;
   Serial.println((String) "Debit   ->" + panjang + "X" + lebar + "X" + tinggi + "/" + jedawaktu + "=" + debit + "dm3");
-
+  Serial.println("jeda waktu => "+(String)jedawaktu + "Debit => "+(String)debit);
   //----------------------------- Hitung Curah Hujan -------------------------------------------------------------------
   //hujan = 20; //masih dummy ya
   Serial.println((String) "Hujan   ->" + hujan + " (Masih dummy hujannya)");
@@ -184,30 +187,30 @@ void loop()
   sensor.add("hujan", rain * 0.053);
   sensor.add("status", statusnya);
   sensor.add("jamtanggal", currentDate);
-
+  Firebase.setJSON(firebaseData,"/realtime/tembalang",sensor);
   // Log debit
   FirebaseJson log_debit;
   log_debit.add("debit", debit);
   log_debit.add("tinggi", tinggi);
   log_debit.add("tanggal", log_tanggal);
   log_debit.add("jam", log_jam);
-  Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_debit);
+  Firebase.pushJSON(firebaseData, "/sensor/tembalang/debit", log_debit);
 
   // Log hujan
   FirebaseJson log_hujan;
   log_hujan.add("nilai", rain * 0.053);
   log_hujan.add("tanggal", log_tanggal);
   log_hujan.add("jam", log_jam);
-
   //----------------------------- Kirim Data Semuanya Tiap Jam -------------------------------------------------------
   // pake pushInt
   int currentMinute = timeClient.getMinutes();
-  if (currentMinute == 0)
+  int currentSecond = timeClient.getSeconds();
+  if (currentMinute == 0  && currentSecond <10)
   {
     Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_hujan);
     rain = 0;
   }
-  delay(_delay);
+  delay(10000);
 }
 
 void ICACHE_RAM_ATTR rainGaugeSensor()
