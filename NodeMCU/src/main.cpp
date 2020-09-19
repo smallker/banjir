@@ -24,7 +24,6 @@
 #define WIFI_PASSWORD "11111111"
 #define FIREBASE_HOST "bisa-b2497.firebaseio.com"
 #define FIREBASE_AUTH "RWiICJnjlpsVomTY9po6AYoAMYuWV4IhEgkMDSgE"
-#define FIREBASE_FCM_SERVER_KEY "AAAAptP-Wxw:APA91bHMxI0A7eRx5t-odsfuyaEsh_PK7LZOfU0Kxhpf-s0Zl_kY4FlKnZ4p6Z10W8clyV9ONb_TavF062XJKak-5onri1wXhqb1tSbOov45TvoqTaGmLe91TRuXnRoGFUPWKU4Fyy9V"
 
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
@@ -34,7 +33,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
 String tanggal, statusnya, ambilstatus;
 double tinggi, debit, jedawaktu, hujan, tinggipipa, lebar, panjang, jarak, status1, status2, status3;
 int rain;
-long duration;
+long duration, _delay = 5;
 String hujan2;
 // defines pins numbers
 #define trigPin D5 //D8
@@ -43,20 +42,6 @@ String hujan2;
 FirebaseData firebaseData;
 
 void ICACHE_RAM_ATTR rainGaugeSensor(void);
-// Notif banjir
-void sendMessage()
-{
-  Serial.println("Mengirim pesan ke server FCM");
-  firebaseData.fcm.setNotifyMessage("Moban", "Banjir gan");
-  if (Firebase.sendTopic(firebaseData))
-  {
-    Serial.println(firebaseData.fcm.getSendResult());
-  }
-  else
-  {
-    Serial.println(firebaseData.errorReason());
-  }
-}
 
 void getSettings()
 {
@@ -78,7 +63,7 @@ void getSettings()
     status2 = output["status2"];
     status3 = output["status3"];
     tinggipipa = output["tinggipipa"];
-    int _delay = output["delay"];
+    _delay = output["delay"];
     Serial.println("Tes setting :\ntinggi pipa => " + (String)tinggipipa + "\nlebar => " + (String)lebar);
   }
 }
@@ -100,10 +85,6 @@ void firebaseSetup()
   Firebase.reconnectWiFi(true);
   firebaseData.setBSSLBufferSize(1024, 1024);
   firebaseData.setResponseSize(1024);
-  firebaseData.fcm.begin(FIREBASE_FCM_SERVER_KEY);
-  firebaseData.fcm.setPriority("high");
-  firebaseData.fcm.setTimeToLive(1000);
-  firebaseData.fcm.setTopic("pesan");
 }
 void setup()
 {
@@ -197,11 +178,6 @@ void loop()
   Serial.println((String) "Status  ->" + statusnya + "");
 
   FirebaseJson sensor;
-  //iki dummy nggo ngetes
-  tinggi = 1000;
-  debit = 1000;
-  // rain = 1000;
-  statusnya = "Bahaya";
   // ===================
   sensor.add("tinggi", tinggi);
   sensor.add("debit", debit);
@@ -209,26 +185,29 @@ void loop()
   sensor.add("status", statusnya);
   sensor.add("jamtanggal", currentDate);
 
+  // Log debit
+  FirebaseJson log_debit;
+  log_debit.add("debit", debit);
+  log_debit.add("tinggi", tinggi);
+  log_debit.add("tanggal", log_tanggal);
+  log_debit.add("jam", log_jam);
+  Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_debit);
+
   // Log hujan
   FirebaseJson log_hujan;
   log_hujan.add("nilai", rain * 0.053);
   log_hujan.add("tanggal", log_tanggal);
   log_hujan.add("jam", log_jam);
-  Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_hujan);
 
-  // Log debit
-  FirebaseJson log_debit;
-  // log_debit.add("nilai",)
-  // log_hujan.add("tanggal")
-  // Firebase.setJSON(firebaseData, "/realtime/tembalang/", sensor);
   //----------------------------- Kirim Data Semuanya Tiap Jam -------------------------------------------------------
   // pake pushInt
   int currentMinute = timeClient.getMinutes();
   if (currentMinute == 0)
   {
-    Firebase.pushJSON(firebaseData, "/sensor/tembalang", sensor);
+    Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_hujan);
+    rain = 0;
   }
-  delay(2000);
+  delay(_delay);
 }
 
 void ICACHE_RAM_ATTR rainGaugeSensor()

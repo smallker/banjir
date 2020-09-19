@@ -9,6 +9,22 @@ const db = admin.database()
 //   response.send("Hello from Firebase!");
 // });
 
-exports.fcm = functions.database.ref('/realtime/tembalang/status').onUpdate((snapshot, context) => {
-    console.log(snapshot.after())
+exports.fcm = functions.database.ref('/realtime/tembalang/status').onWrite((snapshot, context) => {
+    var topic = 'status'
+    var message = {
+        notification: {
+            title: "MONITORING BANJIR",
+            body: snapshot.after
+        },
+        topic: topic
+    }
+    admin.messaging().send(message)
+        .then((response) => {
+            console.log('Successfully sent message:', response)
+            return null
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error)
+        })
+    console.log(snapshot.after)
 })
