@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Moban</string>
+    <string name="dashboard_moban_app">DASHBOARD MOBAN APP</string>
+    <string name="deskrip_info">Moban adalah sebuah aplikasi mobile yang bertujuan untuk memonitoring debit dan curah hujan secara realtime.</string>
+</resources>
