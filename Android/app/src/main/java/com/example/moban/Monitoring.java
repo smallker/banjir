@@ -25,8 +25,6 @@ public class Monitoring extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitoring);
         getSupportActionBar().hide();
-
-
         ketinggian = findViewById(R.id.ketinggian);
         hujan = findViewById(R.id.hujan);
         debit = findViewById(R.id.debit);

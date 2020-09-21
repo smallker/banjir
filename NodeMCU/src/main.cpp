@@ -152,7 +152,6 @@ void loop()
   //----------------------------- Hitung Debit--------------------------------------------------------------------------
   panjang = panjang / 10; // jadiin desimeter(dm)
   lebar = lebar / 10;
-  tinggi = tinggi;
   jedawaktu = jedawaktu * 60; //dari menit jadiin jam
   debit = panjang * lebar * tinggi / 10;
   log_tanggal = String(currentYear) + "-" + tanggal + "-" + String(monthDay);
@@ -187,6 +186,7 @@ void loop()
   sensor.add("hujan", rain * 0.053);
   sensor.add("status", statusnya);
   sensor.add("jamtanggal", currentDate);
+  sensor.add("jarak", jarak);
   Firebase.setJSON(firebaseData,"/realtime/tembalang",sensor);
   // Log debit
   FirebaseJson log_debit;
@@ -205,12 +205,13 @@ void loop()
   // pake pushInt
   int currentMinute = timeClient.getMinutes();
   int currentSecond = timeClient.getSeconds();
-  if (currentMinute == 0  && currentSecond <10)
+  if (currentMinute % 5 == 0  && currentSecond <10)
   {
+    Serial.println("mengirim data hujan");
     Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_hujan);
     rain = 0;
   }
-  delay(10000);
+  delay(3000);
 }
 
 void ICACHE_RAM_ATTR rainGaugeSensor()

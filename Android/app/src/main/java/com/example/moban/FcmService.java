@@ -27,12 +27,13 @@ public class FcmService extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null) {
             // handle notification
+            String title = remoteMessage.getNotification().getTitle();
             String status = remoteMessage.getNotification().getBody();
-            showNotification(status);
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.d(TAG, "onMessageReceived: "+status);
+            showNotification(title,status);
         }
     }
-    private void showNotification(String status) {
+    private void showNotification(String title, String status) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(CHANNEL_DESC);
@@ -40,9 +41,9 @@ public class FcmService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(FcmService.this, CHANNEL_ID);
-        builder.setSmallIcon(R.drawable.logomoban);
-        builder.setContentTitle("NOTIFIKASI PERINGATAN!");
-        builder.setContentText("Status " + status);
+        builder.setSmallIcon(R.drawable.logo_moban_white);
+        builder.setContentTitle(title);
+        builder.setContentText(status);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(FcmService.this);
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
