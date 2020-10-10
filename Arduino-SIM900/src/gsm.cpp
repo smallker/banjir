@@ -71,22 +71,6 @@ void GSM::post(String url, String data, bool isHttps)
     cmd("AT+HTTPTERM",10000);
 }
 
-/// Set to true for https connection
-String GSM::get(String url, bool isHttps)
-{
-    char buffer[200];
-    String data;
-    isHttps == true ? cmd("AT+HTTPSSL=1",1000) : cmd("AT+HTTPSSL=0",1000);
-    cmd("AT+HTTPINIT",1000);
-    cmd("AT+HTTPPARA=\"CID\",1",1000);
-    sprintf(buffer,"AT+HTTPPARA=\"URL\",\"%s\"",url.c_str());
-    cmd(buffer,1000);
-    cmd("AT+HTTPACTION=0",6000);
-    delay(5000);
-    data = cmd("AT+HTTPREAD",10000);
-    cmd("AT+HTTPTERM",10000);
-    return data;
-}
 String GSM::cmd(String command, const long retryInterval)
 {
     unsigned long previousMillis = 0;
@@ -108,11 +92,4 @@ String GSM::cmd(String command, const long retryInterval)
         }
     }
     return data;
-}
-
-void GSM::sleep()
-{
-    response->println("AT+SAPBR=0,1");
-    send->println("AT+SAPBR=0,1");
-    readSerial();
 }

@@ -1,66 +1,81 @@
-#include <Arduino.h>
-#include <gsm.h>
-#include <SoftwareSerial.h>
-#include <ArduinoJson.h>
-#include <TimerOne.h>
-#define powerPin    9
-#define gaugePin    3
-#define echoPin     4
-#define trigPin     5
+#include "main.h"
 
-volatile double tip, debit, banjir;
-const float pertip = 1.346;
-SoftwareSerial data(7, 8); //RX,TX
-GSM gsm;
-
-int measureRange()
+float tinggiAir()
 {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  int duration = pulseIn(echoPin, HIGH);
-  int distance = duration / 58.2;
-  return distance;
+  VL53L0X_RangingMeasurementData_t measure;
+  lox.rangingTest(&measure, false);
+  if (measure.RangeStatus != 4)
+  {
+    float range = (setting.tinggipipa - measure.RangeMilliMeter) / 1000.000;
+    // Serial.println("Tinggi => " + (String)range);
+    data.tinggi = range;
+    return range;
+  }
+  else
+  {
+    // Serial.println(" out of range ");
+    return 0.00;
+  }
 }
 
-void countTip()
+void tipHujan()
 {
-  tip += pertip;
-  Serial.print("curah hujan :");
-  Serial.println(tip);
+  static unsigned long last_interrupt_time = 0;
+  unsigned long interrupt_time = millis();
+  if (interrupt_time - last_interrupt_time > setting.debounce)
+  {
+    data.tip += setting.pertip;
+    Serial.println("tip : " + (String)data.tip);
+  }
+  last_interrupt_time = interrupt_time;
 }
+
 void calculateReading()
 {
-  debit = tip / 10;
-  tip = 0;
+  if (setting.count == setting.samplingtime)
+  {
+    data.debit = data.tinggi * setting.luas / setting.samplingtime;
+    data.lastTip = data.tip;
+    data.intensitas = (data.lastTip / 24.00) * (pow((24.000 / 0.017), 0.67));
+    data.tip = 0.00;
+    setting.count = 0;
+    Serial.println("data hujan terakhir :" + (String)data.lastTip);
+    Serial.println("intensitas :" + (String)data.intensitas);
+  }
+  setting.count++;
 }
 void setup()
 {
   Serial.begin(9600);
-  data.begin(9600);
+  Serial.println("start");
+  sim900.begin(9600);
+  if (!lox.begin())
+  {
+    // Serial.println(F("Failed to boot VL53L0X"));
+    while (1)
+      ;
+  }
   gsm.log(&Serial);
-  gsm.init(&data, powerPin);
+  gsm.init(&sim900, powerPin);
   gsm.initGPRS("3gprs"); //APN
-  // Timer1.initialize(10000000);
-  // Timer1.attachInterrupt(calculateReading);
-  pinMode(2, INPUT_PULLUP);
-  // attachInterrupt(digitalPinToInterrupt(gaugePin),countTip,FALLING);
+  Timer1.initialize(setting.second);
+  Timer1.attachInterrupt(calculateReading);
+  pinMode(gaugePin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(gaugePin), tipHujan, FALLING);
 }
 
 void loop()
 {
   String myData;
   DynamicJsonDocument doc(JSON_OBJECT_SIZE(3));
-  // doc["tempat"] = "tembalang";
-  // doc["hujan"] = debit;
-  // doc["banjir"] = measureRange();
-  doc["hujan"] = 5;
-  doc["debit"] = rand() % 10;
-  doc["tinggi"] = rand() % 10;
+  doc["hujan"] = data.lastTip;
+  doc["debit"] = data.debit;
+  doc["tinggi"] = tinggiAir();
   serializeJson(doc, myData);
+  gsm.post("https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor", myData, true);
   // gsm.post("https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor?type=hujan", myData, true);
-  Serial.println(gsm.get("http://worldtimeapi.org/api/ip",false));
+  // Serial.println(gsm.get("http://worldtimeapi.org/api/ip",false));
   delay(5000);
+  // Serial.println("debit => " + (String)data.debit);
+  // Serial.println("hujan => " + (String)data.lastTip);
 }

@@ -9,13 +9,13 @@ class GSM
         void log(Stream *hwSerial);
         void initGPRS(String apn);
         void post(String url,String data, bool isHttps);
-        String get(String url, bool isHttps);
-        void sleep();
-        struct response
-        {
-            String header;
-            String body;
-        };
+        // String get(String url, bool isHttps);
+        // void sleep();
+        // struct response
+        // {
+        //     String header;
+        //     String body;
+        // };
         
     private:
         void readSerial();
