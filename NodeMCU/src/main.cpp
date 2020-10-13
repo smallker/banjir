@@ -45,6 +45,7 @@ FirebaseData firebaseData;
 void ICACHE_RAM_ATTR rainGaugeSensor(void);
 void ICACHE_RAM_ATTR dataHujan(void);
 
+// mengambil setting dari firebase
 void getSettings()
 {
   DynamicJsonDocument output(1024);
@@ -58,7 +59,6 @@ void getSettings()
       Serial.println(error.c_str());
       return;
     }
-    // _start  = output["start"];
     lebar = output["lebar"];
     panjang = output["panjang"];
     status1 = output["status1"];
@@ -146,12 +146,12 @@ void loop()
   //distance_in = distance_cm * 0,393701;
 
   //------------------------------ Hitung Tinggi -----------------------------------------------------------------------
-  tinggi = tinggipipa - jarak;
+  tinggi = (tinggipipa - jarak)/100;
   Serial.println((String) "Tinggi  ->" + tinggipipa + "-" + jarak + "=" + tinggi + "cm");
 
   //----------------------------- Hitung Debit--------------------------------------------------------------------------
-  panjang = panjang / 10; // jadiin desimeter(dm)
-  lebar = lebar / 10;
+  panjang = panjang / 100; // jadiin desimeter(dm)
+  lebar = lebar / 100;
   jedawaktu = jedawaktu * 60; //dari menit jadiin jam
   debit = panjang * lebar * tinggi / 10;
   log_tanggal = String(currentYear) + "-" + tanggal + "-" + String(monthDay);
@@ -211,7 +211,7 @@ void loop()
     Firebase.pushJSON(firebaseData, "/sensor/tembalang/hujan", log_hujan);
     rain = 0;
   }
-  delay(3000);
+  delay(10000);
 }
 
 void ICACHE_RAM_ATTR rainGaugeSensor()

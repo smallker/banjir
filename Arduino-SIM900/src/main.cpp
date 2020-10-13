@@ -61,9 +61,9 @@ void setup()
   sim900.begin(9600);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
-  // gsm.log(&Serial);
-  // gsm.init(&sim900, powerPin);
-  // gsm.initGPRS("3gprs"); //APN
+  gsm.log(&Serial);
+  gsm.init(&sim900, powerPin);
+  gsm.initGPRS("3gprs"); //APN
   Timer1.initialize(setting.second);
   Timer1.attachInterrupt(calculateReading);
   pinMode(gaugePin, INPUT_PULLUP);
@@ -74,16 +74,15 @@ void loop()
 {
   String myData;
   DynamicJsonDocument doc(JSON_OBJECT_SIZE(3));
-  doc["hujan"] = data.lastTip;
-  doc["debit"] = data.debit;
-  doc["tinggi"] = tinggiAir();
+  // doc["hujan"] = data.lastTip;
+  // doc["debit"] = data.debit;
+  // doc["tinggi"] = tinggiAir();
+  doc["hujan"] = 2;
+  doc["debit"] = 5;
+  doc["tinggi"] = 6;
   serializeJson(doc, myData);
-  if (data.debit > 0)
+  serializeJsonPretty(doc, Serial);
+  // if (data.debit > 0)
     gsm.post("https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor", myData, true);
-  // gsm.post("https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor?type=hujan", myData, true);
-  // Serial.println(gsm.get("http://worldtimeapi.org/api/ip",false));
-  delay(1000);
-  Serial.println("debit => " + (String)data.debit);
-  Serial.println("hujan => " + (String)data.lastTip);
-  Serial.println("tinggi => " + (String)data.tinggi);
+  delay(20000);
 }
