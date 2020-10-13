@@ -2,21 +2,6 @@
 
 float tinggiAir()
 {
-  // VL53L0X_RangingMeasurementData_t measure;
-  // lox.rangingTest(&measure, false);
-  // if (measure.RangeStatus != 4)
-  // {
-  //   float range = (setting.tinggipipa - measure.RangeMilliMeter) / 1000.000;
-  //   Serial.println("Tinggi => " + (String)range);
-  //   float range;
-  //   data.tinggi = range;
-  //   return range;
-  // }
-  // else
-  // {
-  //   Serial.println(" out of range ");
-  //   return 0.00;
-  // }
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);

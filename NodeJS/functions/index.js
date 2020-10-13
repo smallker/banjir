@@ -55,8 +55,10 @@ app.post('/sensor', (req, res) => {
     let jam = `${hour}:${minute}:${second}`
     let tanggal = `${year}-${month}-${date}`
 
-    let status = "Aman"
-    // if(tinggi)
+    let status = ""
+    if(tinggi < 0.2) status = "Aman"
+    if(tinggi > 0.4 && tinggi < 0.6) status = "Siaga"
+    if(tinggi > 0.6) status = "Bahaya"
     db.ref('/realtime/tembalang/').update({
         hujan: hujan,
         jamtanggal: formattedTime,
@@ -71,7 +73,7 @@ app.post('/sensor', (req, res) => {
         status: status,
         tinggi: tinggi
     })
-    if (minute == 40) {
+    if (minute == 0) {
         db.ref('/sensor/tembalang/jam/').push({
             hujan: hujan,
             jamtanggal: formattedTime,
