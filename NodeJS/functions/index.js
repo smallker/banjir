@@ -42,10 +42,11 @@ app.post('/sensor', (req, res) => {
     let debit = req.body.debit
     let hujan = req.body.hujan
     let tinggi = req.body.tinggi
+    let intensitas = req.body.intensitas==null?0:req.body.intensitas
     let dateNow = new Date(Date.now())
     let year = dateNow.getFullYear()
-    let month = dateNow.getMonth() <10? "0"+dateNow.getMonth():dateNow.getMonth()
-    let date = dateNow.getDate() <10? "0"+dateNow.getDate():dateNow.getDate()
+    let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
+    let date = dateNow.getDate() < 10 ? "0" + dateNow.getDate() : dateNow.getDate()
     let hour = dateNow.getHours()
     let minute = dateNow.getMinutes()
     let second = dateNow.getSeconds()
@@ -56,22 +57,24 @@ app.post('/sensor', (req, res) => {
     let tanggal = `${year}-${month}-${date}`
 
     let status = ""
-    if(tinggi < 0.2) status = "Aman"
-    if(tinggi > 0.4 && tinggi < 0.6) status = "Siaga"
-    if(tinggi > 0.6) status = "Bahaya"
+    if (tinggi < 0.2) status = "Aman"
+    if (tinggi > 0.4 && tinggi < 0.6) status = "Siaga"
+    if (tinggi > 0.6) status = "Bahaya"
     db.ref('/realtime/tembalang/').update({
         hujan: hujan,
         jamtanggal: formattedTime,
         debit: debit,
         status: status,
-        tinggi: tinggi
+        tinggi: tinggi,
+        intensitas: intensitas
     })
     db.ref('/sensor/tembalang/menit/').push({
         hujan: hujan,
         jamtanggal: formattedTime,
         debit: debit,
         status: status,
-        tinggi: tinggi
+        tinggi: tinggi,
+        intensitas: intensitas
     })
     if (minute == 0) {
         db.ref('/sensor/tembalang/jam/').push({
@@ -79,7 +82,19 @@ app.post('/sensor', (req, res) => {
             jamtanggal: formattedTime,
             debit: debit,
             status: status,
-            tinggi: tinggi
+            tinggi: tinggi,
+            intensitas: intensitas
         })
     }
+    // if (hour == 0) {
+    //     db.ref('/sensor/tembalang/hari/').push({
+    //         hujan: hujan,
+    //         jamtanggal: formattedTime,
+    //         debit: debit,
+    //         status: status,
+    //         tinggi: tinggi,
+    //         intensitas: intensitas
+    //     })
+    // }
+    res.send("OK")
 })

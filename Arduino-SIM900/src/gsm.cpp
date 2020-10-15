@@ -23,7 +23,7 @@ void GSM::togglePower(){
     digitalWrite(_powerPin,HIGH);
     delay(2000);
     digitalWrite(_powerPin,LOW);
-    delay(20000);
+    delay(40000);
 }
 
 /// Configure serial interface for debugging
@@ -64,7 +64,7 @@ void GSM::post(String url, String data, bool isHttps)
     sprintf(buffer, "AT+HTTPPARA=\"URL\",\"%s\"", url.c_str());
     cmd(buffer,1000);
     cmd("AT+HTTPPARA=\"CONTENT\",\"application/json\"",1000);
-    cmd("AT+HTTPDATA=" + String(data.length()) + ",100000",3000);
+    cmd("AT+HTTPDATA=" + String(data.length()) + ",100000",5000);
     cmd(data,6000);
     cmd("AT+HTTPACTION=1",6000);
     cmd("AT+HTTPREAD",6000);

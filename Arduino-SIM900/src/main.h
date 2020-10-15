@@ -16,9 +16,9 @@ GSM gsm;
 struct Setting
 {
   unsigned int tinggipipa = 1000;   //dalam milimeter
-  float luas = 6.18; //dalam kilometer persegi
+  float luas = 0.55; //dalam kilometer persegi
   const float pertip = 0.053;
-  unsigned int samplingtime = 60; // dalam detik
+  int samplingtime = 60; // dalam detik
   unsigned int count, interruptTime = 10; //dalam detik
   const float second = 1000000;
   byte debounce = 200;
@@ -26,5 +26,6 @@ struct Setting
 
 struct Data
 {
- volatile float tip, lastTip, debit, banjir, tinggi = 0.00, intensitas;
+ volatile float tip, lastTip, debit, banjir, tinggi = 0.00, intensitas = 0.0;
+ String buffer;
 } data;
