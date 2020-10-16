@@ -4,161 +4,241 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Data"
     android:background="@drawable/bg3"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Data">
 
-    <androidx.cardview.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="158dp"
-        app:cardCornerRadius="10.0dp"
-        app:cardElevation="5dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/col"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:orientation="horizontal">
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="13dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg3"
+                    android:gravity="center"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Penjelasan Debit"
-                        android:textColor="#34495e"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Debit adalah kecepatan aliran air per satuan waktu. Pada sistem ini debit air yang dihitung adalah volume pada suatu area per satuan waktu."
-                        android:textColor="#34495e"
-                        android:textSize="17sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="INFORMASI UMUM"
+                            android:textColor="#ffff"
+                            android:textStyle="bold"
+                            android:textSize="25sp" />
+
                 </LinearLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
 
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="158dp"
-        app:cardCornerRadius="10.0dp"
-        app:cardElevation="5dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/col"
-            android:orientation="vertical">
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:orientation="horizontal">
+                android:layout_height="158dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                app:cardCornerRadius="10.0dp"
+                app:cardElevation="5dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg3"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Penjelasan Curah Hujan"
-                        android:textColor="#34495e"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Curah Hujan adalah banyaknya air yang turun dalam suatu wilayah dalam satu waktu. Pada sistem ini dalam perhitungan curah hujan menggunakan metode Tipping Bucket."
-                        android:textColor="#34495e"
-                        android:textSize="17sp" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="30dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Penjelasan Debit Air"
+                                android:textColor="#ffff"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Debit adalah kecepatan aliran air per satuan waktu. Pada sistem ini debit air yang dihitung adalah volume pada suatu area per satuan waktu."
+                                android:textColor="#ffff"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="158dp"
-        app:cardCornerRadius="10.0dp"
-        app:cardElevation="5dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/col"
-            android:orientation="vertical">
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:orientation="horizontal">
+                android:layout_height="158dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                app:cardCornerRadius="10.0dp"
+                app:cardElevation="5dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg3"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Penjelasan Sistem"
-                        android:textColor="#34495e"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="#34495e"
-                        android:textSize="17sp" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="30dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Penjelasan Curah Hujan"
+                                android:textColor="#ffff"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Curah Hujan adalah banyaknya air yang turun dalam suatu wilayah dalam satu waktu. Pada sistem ini dalam perhitungan curah hujan menggunakan metode Tipping Bucket."
+                                android:textColor="#ffff"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
-                <RelativeLayout
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="158dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                app:cardCornerRadius="10.0dp"
+                app:cardElevation="5dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg3"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="30dp"
+                        android:orientation="horizontal">
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Penjelasan Sistem Aplikasi"
+                                android:textColor="#ffff"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Aplikasi ini bertujuan untuk memonitoring semua data yang dikirimkan oleh prototype."
+                                android:textColor="#ffff"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardkalat"
+                android:layout_width="match_parent"
+                android:layout_height="158dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                app:cardCornerRadius="10.0dp"
+                app:cardElevation="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg3"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="30dp"
+                        android:orientation="vertical">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cara Kerja Alat"
+                                android:textColor="#ffff"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ketuk untuk melihat penjelasan cara kerja alat pada sistem aplikasi ini."
+                                android:textColor="#ffff"
+                                android:textSize="14sp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
 </LinearLayout>

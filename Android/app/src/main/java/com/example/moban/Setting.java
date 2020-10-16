@@ -30,17 +30,21 @@ public class Setting extends AppCompatActivity {
     private SharedPreferences notifSet;
     private static final String NOTIF = "Notif";
     private SwitchCompat tb_notif;
+    TextView txtKetNotif;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        getSupportActionBar().hide();
         tb_notif = findViewById(R.id.btn_notif);
+        txtKetNotif = findViewById(R.id.txt_ket_notif);
         notifSet = getSharedPreferences(NOTIF, Context.MODE_PRIVATE);
         tb_notif.setChecked(notifSet.getBoolean(NOTIF, false));
         tb_notif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    txtKetNotif.setText("Anda Akan Menerima Notifikasi Ketika Pergantian Status");
                     FirebaseMessaging.getInstance().subscribeToTopic("status").addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -52,6 +56,7 @@ public class Setting extends AppCompatActivity {
                         }
                     });
                 } else {
+                    txtKetNotif.setText("Anda Tidak Akan Menerima Notifikasi Ketika Pergantian Status");
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("status").addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

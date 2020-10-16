@@ -1,29 +1,16 @@
 package com.example.moban;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 public class MainActivity extends AppCompatActivity {
 
-    CardView monitor;
-    DatabaseReference reff;
     boolean doubleBackToExitPressedOnce = false;
 
     public void onBackPressed(){
@@ -47,28 +34,30 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        ((CardView) findViewById(R.id.cardsetting)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.cardsetting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent monitoring = new Intent(MainActivity.this, Setting.class);
                 startActivity(monitoring);
             }
         });
-        ((CardView) findViewById(R.id.carddata)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.carddata).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent monitoring = new Intent(MainActivity.this, Data.class);
                 startActivity(monitoring);
             }
         });
-        ((CardView) findViewById(R.id.cardmonitor)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.cardmonitor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent monitoring = new Intent(MainActivity.this, Monitoring.class);
                 startActivity(monitoring);
+//                Intent monitoring = new Intent(MainActivity.this, Graph.class);
+//                startActivity(monitoring);
             }
         });
-        ((CardView) findViewById(R.id.cardtentang)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.cardtentang).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent monitoring = new Intent(MainActivity.this, Tentang.class);

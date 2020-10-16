@@ -9,6 +9,9 @@
         android:roundIcon="@drawable/logomoban"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".Graph"
+            android:screenOrientation="landscape" />
         <activity android:name=".Data" />
         <activity android:name=".Tentang" />
         <activity android:name=".Setting" />
@@ -21,10 +24,10 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".Monitoring" />
-        <service
-            android:name=".FcmService">
+
+        <service android:name=".FcmService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
