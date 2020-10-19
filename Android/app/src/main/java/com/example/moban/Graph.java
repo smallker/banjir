@@ -60,7 +60,7 @@ public class Graph extends AppCompatActivity {
                         xVal.add(jam);
                         yVal.add(new Entry(count, value));
                         count++;
-                        Log.d(TAG, "onDataChange: "+value);
+                        Log.d(TAG, "onDataChange: "+yVal);
                     }
                     GraphSetting graph = new GraphSetting(chart, graphInfo, xVal, yVal);
                     graph.show();

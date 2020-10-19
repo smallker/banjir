@@ -16,6 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 
 public class Monitoring extends AppCompatActivity {
     TextView ketinggian, hujan, debit, status, txtjamtanggal, intensitas;
@@ -74,7 +77,7 @@ public class Monitoring extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     String banjir = dataSnapshot.child("tinggi").getValue().toString() + " m";
-                    String debitnya = dataSnapshot.child("debit").getValue().toString() + " m3/s";
+                    String debitnya = round(dataSnapshot.child("debit").getValue(Double.class),2).toString() + " m3/s";
                     String hujann = dataSnapshot.child("hujan").getValue().toString() + " mm";
                     String statusnya = dataSnapshot.child("status").getValue().toString();
                     String jamtanggal = dataSnapshot.child("jamtanggal").getValue().toString();
@@ -95,5 +98,12 @@ public class Monitoring extends AppCompatActivity {
 
             }
         });
+    }
+    private static Double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

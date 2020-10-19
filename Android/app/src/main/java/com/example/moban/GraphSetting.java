@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -46,6 +47,7 @@ public class GraphSetting {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         LineDataSet dataSet = new LineDataSet(yVal,title);
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataSet.setValueFormatter(new ValFormatter());
         dataSet.setFillAlpha(110);
         dataSet.setCircleRadius(10f);
         dataSet.setDrawCircles(true);
