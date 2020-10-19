@@ -3,6 +3,7 @@ package com.example.moban;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -84,7 +85,8 @@ public class Monitoring extends AppCompatActivity {
                     status.setText(statusnya);
                     txtjamtanggal.setText("Data diambil pada: " + jamtanggal);
                     intensitas.setText(intensitasnya);
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 

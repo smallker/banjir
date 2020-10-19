@@ -92,7 +92,7 @@
                                 android:id="@+id/ketinggian"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2m"
+                                android:text="0m"
                                 android:textColor="#ffff"
                                 android:textSize="30dp"
                                 android:textStyle="bold" />
@@ -147,7 +147,7 @@
                                 android:id="@+id/hujan"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1"
+                                android:text="0"
                                 android:textColor="#ffff"
                                 android:textSize="30dp"
                                 android:textStyle="bold" />
@@ -201,7 +201,7 @@
                                 android:id="@+id/intensitas"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1"
+                                android:text="0"
                                 android:textColor="#ffff"
                                 android:textSize="30dp"
                                 android:textStyle="bold" />
@@ -255,7 +255,7 @@
                                 android:id="@+id/debit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2m"
+                                android:text="0m"
                                 android:textColor="#ffff"
                                 android:textSize="30dp"
                                 android:textStyle="bold" />
