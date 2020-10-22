@@ -3,7 +3,6 @@ package com.example.moban;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -76,12 +75,12 @@ public class Monitoring extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    String banjir = dataSnapshot.child("tinggi").getValue().toString() + " m";
-                    String debitnya = round(dataSnapshot.child("debit").getValue(Double.class),2).toString() + " m3/s";
-                    String hujann = dataSnapshot.child("hujan").getValue().toString() + " mm";
+                    String banjir = round(dataSnapshot.child("tinggi").getValue(Double.class),3).toString() + " m";
+                    String debitnya = round(dataSnapshot.child("debit").getValue(Double.class),3).toString() + " m3/s";
+                    String hujann = round(dataSnapshot.child("hujan").getValue(Double.class),3).toString() + " mm";
                     String statusnya = dataSnapshot.child("status").getValue().toString();
                     String jamtanggal = dataSnapshot.child("jamtanggal").getValue().toString();
-                    String intensitasnya = dataSnapshot.child("intensitas").getValue().toString();
+                    String intensitasnya = round(dataSnapshot.child("intensitas").getValue(Double.class),3).toString();
                     ketinggian.setText(banjir);
                     debit.setText(debitnya);
                     hujan.setText(hujann);

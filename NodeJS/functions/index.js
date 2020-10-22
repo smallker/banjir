@@ -47,12 +47,12 @@ app.post('/sensor', (req, res) => {
     let year = dateNow.getFullYear()
     let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
     let date = dateNow.getDate() < 10 ? "0" + dateNow.getDate() : dateNow.getDate()
-    let hour = dateNow.getHours()
-    let minute = dateNow.getMinutes()
+    let hour = dateNow.getHours() <10 ? "0" + dateNow.getHours() : dateNow.getHours()
+    let minute = dateNow.getMinutes() < 10 ? "0" + dateNow.getMinutes() : dateNow.getMinutes()
     let second = dateNow.getSeconds()
 
     // formatted time
-    let formattedTime = `${year}-${month}-${date} ${hour}:${minute}:${second}`
+    let formattedTime = `${year}-${month}-${date} ${hour}:${minute}`
     let jam = `${hour}:${minute}:${second}`
     let tanggal = `${year}-${month}-${date}`
 

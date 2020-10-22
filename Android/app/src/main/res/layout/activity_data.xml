@@ -33,13 +33,13 @@
                     android:orientation="vertical">
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="INFORMASI UMUM"
-                            android:textColor="#ffff"
-                            android:textStyle="bold"
-                            android:textSize="25sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="INFORMASI UMUM"
+                        android:textColor="#ffff"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -77,7 +77,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Penjelasan Debit Air"
+                                android:text="Debit Air"
                                 android:textColor="#ffff"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -85,7 +85,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Debit adalah kecepatan aliran air per satuan waktu. Pada sistem ini debit air yang dihitung adalah volume pada suatu area per satuan waktu."
+                                android:text="Debit air merupakan tinggi permukaan air yang terukur oleh alat ukur permukaan air. Satuan debit yang digunakan adalah meter kubir per detik (m3/s)."
                                 android:textColor="#ffff"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -124,7 +124,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Penjelasan Curah Hujan"
+                                android:text="Curah Hujan"
                                 android:textColor="#ffff"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -132,7 +132,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Curah Hujan adalah banyaknya air yang turun dalam suatu wilayah dalam satu waktu. Pada sistem ini dalam perhitungan curah hujan menggunakan metode Tipping Bucket."
+                                android:text="Curah hujan merupakan jumlah air yang jatuh di permukaan tanah datar selama periode tertentu yang diukur dengan satuan tinggi milimeter (mm) di atas permukaan horizontal."
                                 android:textColor="#ffff"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -174,7 +174,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Penjelasan Sistem Aplikasi"
+                                android:text="Intensitas Hujan"
                                 android:textColor="#ffff"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -182,7 +182,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Aplikasi ini bertujuan untuk memonitoring semua data yang dikirimkan oleh prototype."
+                                android:text="Intensitas hujan adalah banyaknya curah hujan persatuan jangka waktu tertentu."
                                 android:textColor="#ffff"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -193,52 +193,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardkalat"
-                android:layout_width="match_parent"
-                android:layout_height="158dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp"
-                app:cardCornerRadius="10.0dp"
-                app:cardElevation="5dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg3"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="30dp"
-                        android:orientation="vertical">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Cara Kerja Alat"
-                                android:textColor="#ffff"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Ketuk untuk melihat penjelasan cara kerja alat pada sistem aplikasi ini."
-                                android:textColor="#ffff"
-                                android:textSize="14sp" />
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
