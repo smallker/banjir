@@ -35,7 +35,6 @@ void calculateReading()
     data.tip = 0.00;
     setting.count = 0;
   }
-  // Serial.println(setting.count);
   setting.count++;
 }
 void setup()
