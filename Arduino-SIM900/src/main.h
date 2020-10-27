@@ -16,10 +16,10 @@ GSM gsm;
 struct Setting
 {
   unsigned int tinggipipa = 1000;   //dalam milimeter
-  float luas = 0.55; //dalam kilometer persegi
+  float luas = 0.551; //dalam kilometer persegi
   const float pertip = 0.053;
   int samplingtime = 60; // dalam detik
-  unsigned int count, interruptTime = 10; //dalam detik
+  int count, interruptTime = 10; //dalam detik
   const float second = 1000000;
   byte debounce = 200;
 } setting;

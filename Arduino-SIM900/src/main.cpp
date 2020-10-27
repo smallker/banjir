@@ -41,17 +41,17 @@ void setup()
 {
   Serial.begin(9600);
   Serial.println("start");
-  sim900.begin(9600);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   pinMode(gaugePin, INPUT_PULLUP);
+  pinMode(gaugePin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(gaugePin), tipHujan, FALLING);
+  Timer1.initialize(1000000);
+  Timer1.attachInterrupt(calculateReading);
+  sim900.begin(9600);
   gsm.log(&Serial);
   gsm.init(&sim900, powerPin);
   gsm.initGPRS("3gprs"); //APN
-  Timer1.initialize(1000000);
-  Timer1.attachInterrupt(calculateReading);
-  pinMode(gaugePin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(gaugePin), tipHujan, FALLING);
 }
 
 void loop()
@@ -70,8 +70,8 @@ void loop()
 
   serializeJson(doc, buffer);
   // if (data.debit > 0)
-    gsm.post("https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor", buffer, true);
+  gsm.post("https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor", buffer, true);
   delay(40000);
-  int finish = (millis() - mulai)/1000;
-  Serial.println("waktu => "+(String)finish);
+  int finish = (millis() - mulai) / 1000;
+  Serial.println("waktu => " + (String)finish);
 }
