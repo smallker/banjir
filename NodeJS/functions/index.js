@@ -42,20 +42,21 @@ app.post('/sensor', (req, res) => {
     let debit = req.body.debit
     let hujan = req.body.hujan
     let tinggi = req.body.tinggi
-    let intensitas = req.body.intensitas==null?0:req.body.intensitas
+    let intensitas = req.body.intensitas == null ? 0 : req.body.intensitas
     let dateNow = new Date(Date.now())
     let year = dateNow.getFullYear()
     let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
     let date = dateNow.getDate() < 10 ? "0" + dateNow.getDate() : dateNow.getDate()
-    let hour = dateNow.getHours() <10 ? "0" + dateNow.getHours() : dateNow.getHours()
+    let hour = dateNow.getHours() < 10 ? "0" + dateNow.getHours() : dateNow.getHours()
     let minute = dateNow.getMinutes() < 10 ? "0" + dateNow.getMinutes() : dateNow.getMinutes()
     let second = dateNow.getSeconds()
 
+    // intensitas
+    // let lastHour = new Date(Date.now()- Date.)
     // formatted time
     let formattedTime = `${year}-${month}-${date} ${hour}:${minute}`
     let jam = `${hour}:${minute}:${second}`
     let tanggal = `${year}-${month}-${date}`
-
     let status = ""
     if (tinggi < 0.2) status = "Aman"
     if (tinggi > 0.4 && tinggi < 0.6) status = "Siaga"
@@ -66,35 +67,132 @@ app.post('/sensor', (req, res) => {
         debit: debit,
         status: status,
         tinggi: tinggi,
-        intensitas: intensitas
+        intensitas: intensitas,
+        timestamp: Date.now()
     })
     db.ref('/sensor/tembalang/menit/').push({
         hujan: hujan,
-        jamtanggal: formattedTime,
+        jam: jam,
+        tanggal: tanggal,
         debit: debit,
         status: status,
         tinggi: tinggi,
-        intensitas: intensitas
+        intensitas: intensitas,
+        timestamp: Date.now()
     })
-    if (minute == 0) {
-        db.ref('/sensor/tembalang/jam/').push({
-            hujan: hujan,
-            jamtanggal: formattedTime,
-            debit: debit,
-            status: status,
-            tinggi: tinggi,
-            intensitas: intensitas
-        })
-    }
-    // if (hour == 0) {
-    //     db.ref('/sensor/tembalang/hari/').push({
-    //         hujan: hujan,
-    //         jamtanggal: formattedTime,
-    //         debit: debit,
-    //         status: status,
-    //         tinggi: tinggi,
-    //         intensitas: intensitas
-    //     })
-    // }
     res.send("OK")
+})
+
+app.get('/daily', (req, res) => {
+    let dateNow = new Date(Date.now())
+    let year = dateNow.getFullYear()
+    let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
+    let date = dateNow.getDate() < 10 ? "0" + dateNow.getDate() : dateNow.getDate()
+    let hour = dateNow.getHours() < 10 ? "0" + dateNow.getHours() : dateNow.getHours()
+    let minute = dateNow.getMinutes() < 10 ? "0" + dateNow.getMinutes() : dateNow.getMinutes()
+    let second = dateNow.getSeconds()
+
+    // intensitas
+    // let lastHour = new Date(Date.now()- Date.)
+    // formatted time
+    let formattedTime = `${year}-${month}-${date} ${hour}:${minute}`
+    let jam = `${hour}:${minute}:${second}`
+    let tanggal = `${year}-${month}-${date}`
+
+    let lastHour = Date.now() - 86400000// 24 jam
+    let intensitasJam = 0
+    let hujan = 0
+    let debit = []
+    let tinggi = []
+    db.ref('/sensor/tembalang/jam').orderByChild('timestamp').startAt(lastHour).endAt(Date.now())
+        .once('value', (snapshot) => {
+            let numchildren = snapshot.numChildren()
+            let count = 0
+            let future = new Promise((resolve, reject) => {
+                snapshot.forEach((value) => {
+                    intensitasJam = intensitasJam + value.val().intensitas
+                    hujan = hujan + value.val().hujan
+                    debit.push(value.val().debit)
+                    tinggi.push(value.val().tinggi)
+                    count++
+                })
+                if (count == numchildren) resolve()
+                if (count < 0) reject(Error)
+            })
+            future.then((_) => {
+                db.ref('/realtime/tembalang/').once('value', (snapshot) => {
+                    db.ref('/sensor/tembalang/hari').push(snapshot.val())
+                        .then((snap) => {
+                            console.log(Math.max.apply())
+                            db.ref(`/sensor/tembalang/hari/${snap.key}/`).update(
+                                {
+                                    intensitas: intensitasJam,
+                                    hujan: hujan,
+                                    debit: Math.max.apply(null, debit),
+                                    tinggi: Math.max.apply(null, tinggi),
+                                    jam: jam,
+                                    tanggal: tanggal
+                                }
+                            )
+                        }).catch((Error) => console.log(Error))
+                })
+            })
+        })
+    res.send('OK')
+})
+
+app.get('/hourly', (req, res) => {
+    let dateNow = new Date(Date.now())
+    let year = dateNow.getFullYear()
+    let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
+    let date = dateNow.getDate() < 10 ? "0" + dateNow.getDate() : dateNow.getDate()
+    let hour = dateNow.getHours() < 10 ? "0" + dateNow.getHours() : dateNow.getHours()
+    let minute = dateNow.getMinutes() < 10 ? "0" + dateNow.getMinutes() : dateNow.getMinutes()
+    let second = dateNow.getSeconds()
+
+    // intensitas
+    // let lastHour = new Date(Date.now()- Date.)
+    // formatted time
+    let formattedTime = `${year}-${month}-${date} ${hour}:${minute}`
+    let jam = `${hour}:${minute}:${second}`
+    let tanggal = `${year}-${month}-${date}`
+
+    let lastHour = Date.now() - 3600000// jam sekarang - 1 jam kebelakang
+    let intensitasJam = 0
+    let hujan = 0
+    let debit = []
+    let tinggi = []
+    db.ref('/sensor/tembalang/menit').orderByChild('timestamp').startAt(lastHour).endAt(Date.now())
+        .once('value', (snapshot) => {
+            let numchildren = snapshot.numChildren()
+            let count = 0
+            let future = new Promise((resolve, reject) => {
+                snapshot.forEach((value) => {
+                    intensitasJam = intensitasJam + value.val().intensitas
+                    hujan = hujan + value.val().hujan
+                    debit.push(value.val().debit)
+                    tinggi.push(value.val().tinggi)
+                    count++
+                })
+                if (count == numchildren) resolve()
+                if (count < 0) reject(Error)
+            })
+            future.then((_) => {
+                db.ref('/realtime/tembalang/').once('value', (snapshot) => {
+                    db.ref('/sensor/tembalang/jam').push(snapshot.val())
+                        .then((snap) => {
+                            db.ref(`/sensor/tembalang/jam/${snap.key}/`).update(
+                                {
+                                    intensitas: intensitasJam,
+                                    hujan: hujan,
+                                    debit: Math.max.apply(null, debit),
+                                    tinggi: Math.max.apply(null, tinggi),
+                                    jam: jam,
+                                    tanggal: tanggal,
+                                })
+                        }).catch((Error) => console.log(Error))
+                })
+            })
+        })
+    res.send('OK')
 })
