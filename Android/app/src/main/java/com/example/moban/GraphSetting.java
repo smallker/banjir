@@ -4,8 +4,8 @@ import android.graphics.Color;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -28,6 +28,8 @@ public class GraphSetting {
     }
     public void show(){
         Description description = new Description();
+        Legend legend = chart.getLegend();
+        legend.setTextSize(20f);
         description.setText("");
         chart.setDescription(description);
         chart.setDragEnabled(true);
