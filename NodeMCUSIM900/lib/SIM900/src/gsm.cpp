@@ -50,17 +50,18 @@ void GSM::initGPRS(String apn)
     cmd("AT", 1000);
     while (true)
     {
+        delay(50);
         cmd("AT+SAPBR=3,1,\"Contype\",\"GPRS\"", 1000);
         sprintf(buffer, "AT+SAPBR=3,1,\"APN\",\"%s\"", apn.c_str());
         cmd(buffer, 1000);
         cmd("AT+SAPBR=1,1", 1000);
         if (cmd("AT+SAPBR=2,1", 1000).substring(15, 22) != "0.0.0.0")
-            {
-                response->println("Connected to Network");
-                break;
-            }
+        {
+            delay(1000);
+            response->println("Connected to Network");
+            break;
+        }
     }
-    
 }
 
 /// Set to true for https connection
@@ -84,7 +85,7 @@ String GSM::cmd(String command, const long retryInterval)
 {
     unsigned long previousMillis = 0;
     String data;
-    for (;;)
+    while (true)
     {
         unsigned long currentMillis = millis();
         if (currentMillis - previousMillis >= retryInterval)

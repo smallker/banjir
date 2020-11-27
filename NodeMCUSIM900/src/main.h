@@ -1,10 +1,9 @@
 #include <Arduino.h>
 #include <gsm.h>
 #include <SoftwareSerial.h>
-
 #include <Ticker.h>
 #include <ArduinoJson.h>
-
+#include <ESP8266WiFi.h>
 #define VL
 
 #if defined(VL)
@@ -20,7 +19,6 @@ VL53L0X sensor;
 #define SIM_TX      D8
 #define PWR_PIN     D5
 #define RAIN_GAUGE  D6
-
 GSM gsm;
 
 SoftwareSerial sim(SIM_RX, SIM_TX);

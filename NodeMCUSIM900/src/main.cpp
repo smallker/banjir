@@ -1,9 +1,9 @@
 #include "main.h"
 float tinggiAir()
 {
-  #if defined(VL)
+#if defined(VL)
   int distance = sensor.readRangeContinuousMillimeters();
-  #else
+#else
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -11,11 +11,13 @@ float tinggiAir()
   digitalWrite(trigPin, LOW);
   int duration = pulseIn(echoPin, HIGH);
   int distance = duration / 5.82;
-  #endif
+#endif
   data.tinggi = abs(setting.tinggipipa - distance) / 1000.00;
   return data.tinggi;
 }
-
+void hw_wdt_disable(){
+  *((volatile uint32_t*) 0x60000900) &= ~(1); // Hardware WDT OFF
+}
 void ICACHE_RAM_ATTR tipHujan()
 {
   static unsigned long last_interrupt_time = 0;
@@ -44,16 +46,26 @@ void ICACHE_RAM_ATTR calculateReading()
 
 void setup()
 {
-  Serial.begin(9600);
-  pinMode(RAIN_GAUGE, INPUT_PULLUP);
+  ESP.wdtDisable();
+  hw_wdt_disable();
+  Serial.begin(115200);
+  digitalWrite(SIM_TX, LOW);
   Wire.begin();
   sensor.setTimeout(500);
   if (!sensor.init())
   {
     Serial.println("Failed to detect and initialize sensor!");
-    while (1) {}
+    while (1)
+    {
+    }
   }
   sensor.startContinuous(100);
+  // while (true)
+  // {
+  //   Serial.println(sensor.readRangeContinuousMillimeters()/10.0);
+  //   delay(50);
+  // }
+
   attachInterrupt(RAIN_GAUGE, tipHujan, FALLING);
   task.attach_ms(1000, calculateReading);
   sim.begin(9600);
@@ -68,6 +80,7 @@ void loop()
     firebase url = "https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor"
     test url = "http://47.241.6.200:3000/tes"
   */
+  // ESP.wdtFeed();
   String url = "https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor";
   tinggiAir();
   String buffer;
