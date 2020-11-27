@@ -17,5 +17,6 @@ class GSM
         Stream *response;
         Stream *send;
         byte powerPin;
+        long timeout = 15000;
 };
 #endif

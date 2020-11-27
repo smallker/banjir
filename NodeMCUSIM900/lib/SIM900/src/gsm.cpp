@@ -38,15 +38,16 @@ void GSM::initGPRS(String apn)
 {
     char buffer[200];
     response->println("Initializing . .");
+    unsigned long start = millis();
     while (send->available() == false)
     {
         send->println("AT");
         if (send->available() != 0)
             break;
         response->println("Check your wiring");
+        if(millis() - start > timeout) ESP.restart();
         delay(3000);
     }
-    char buff[20];
     cmd("AT", 1000);
     while (true)
     {
@@ -84,6 +85,7 @@ void GSM::post(String url, String data, bool isHttps)
 String GSM::cmd(String command, const long retryInterval)
 {
     unsigned long previousMillis = 0;
+    unsigned long start = millis();
     String data;
     while (true)
     {
@@ -101,6 +103,9 @@ String GSM::cmd(String command, const long retryInterval)
             data = send->readString();
             response->println(data);
             break;
+        }
+        if(millis() - start > (retryInterval + timeout)){
+            ESP.restart();
         }
         delay(50);
     }
