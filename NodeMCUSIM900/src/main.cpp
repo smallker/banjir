@@ -49,7 +49,8 @@ void setup()
   ESP.wdtDisable();
   hw_wdt_disable();
   Serial.begin(115200);
-  digitalWrite(SIM_TX, LOW);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);  
   Wire.begin();
   sensor.setTimeout(500);
   if (!sensor.init())
@@ -72,6 +73,7 @@ void setup()
   gsm.log(&Serial);
   gsm.init(&sim, PWR_PIN);
   gsm.initGPRS("3gprs");
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop()
