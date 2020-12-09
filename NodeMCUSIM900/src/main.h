@@ -25,7 +25,7 @@ SoftwareSerial sim(SIM_RX, SIM_TX);
 Ticker task;
 struct Setting
 {
-  unsigned int tinggipipa = 1000;   //dalam milimeter
+  unsigned int tinggipipa = 910;   //dalam milimeter
   float luas = 0.551; //dalam kilometer persegi
   const float pertip = 0.053;
   int samplingtime = 60; // dalam detik

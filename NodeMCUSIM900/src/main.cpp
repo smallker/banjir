@@ -12,7 +12,7 @@ float tinggiAir()
   int duration = pulseIn(echoPin, HIGH);
   int distance = duration / 5.82;
 #endif
-  data.tinggi = abs(setting.tinggipipa - distance) / 1000.00;
+  data.tinggi = (abs(setting.tinggipipa - distance) / 1000.00)/100.00;
   return data.tinggi;
 }
 void hw_wdt_disable(){
@@ -66,7 +66,7 @@ void setup()
   //   Serial.println(sensor.readRangeContinuousMillimeters()/10.0);
   //   delay(50);
   // }
-
+  
   attachInterrupt(RAIN_GAUGE, tipHujan, FALLING);
   task.attach_ms(1000, calculateReading);
   sim.begin(9600);
