@@ -60,7 +60,6 @@ void setup()
   gsm.log(&Serial);
   gsm.init(&sim, PWR_PIN);
   gsm.initGPRS("3gprs");
-  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop()
@@ -70,8 +69,6 @@ void loop()
     test url = "http://47.241.6.200:3000/tes"
   */
   // ESP.wdtFeed();
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
   digitalWrite(LED_BUILTIN, LOW);
   String url = "https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor";
   // Serial.println("tinggi : "+(String)tinggiAir());
@@ -96,5 +93,4 @@ void loop()
     delay(1000);
     count++;
   }
-  digitalWrite(LED_BUILTIN, LOW);
 }
