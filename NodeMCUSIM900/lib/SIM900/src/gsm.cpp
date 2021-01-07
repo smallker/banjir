@@ -82,8 +82,9 @@ void GSM::post(String url, String data, bool isHttps)
     cmd("AT+HTTPTERM", 10000);
 }
 
-String GSM::cmd(String command, const long retryInterval)
+String GSM::cmd(String command, long retryInterval)
 {
+    retryInterval = retryInterval / 2 ;
     unsigned long previousMillis = 0;
     unsigned long start = millis();
     String data;
@@ -101,6 +102,16 @@ String GSM::cmd(String command, const long retryInterval)
         {
             // response->println(send->readString());
             data = send->readString();
+
+            // if response code 601 will restart
+            MatchState ms;
+            char buff[data.length()+1];
+            data.toCharArray(buff, data.length() + 1);
+            ms.Target(buff);
+            char result = ms.Match("601");
+            if(result>0) ESP.restart();
+
+            
             response->println(data);
             break;
         }

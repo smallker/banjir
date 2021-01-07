@@ -1,6 +1,7 @@
 #ifndef gsm_h
 #define gsm_h
 #include "Arduino.h"
+#include "Regexp.h"
 class GSM
 {
     public:

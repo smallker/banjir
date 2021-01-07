@@ -1,22 +1,17 @@
 #include "main.h"
+#include <Regexp.h>
+
 float tinggiAir()
 {
-#if defined(VL)
-  int distance = sensor.readRangeContinuousMillimeters();
-#else
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  int duration = pulseIn(echoPin, HIGH);
-  int distance = duration / 5.82;
-#endif
-  data.tinggi = (abs(setting.tinggipipa - distance) / 1000.00)/100.00;
+  float distance = sensor.readRangeSingleMillimeters();
+  if (distance > 60000)
+    ESP.restart();
+  data.tinggi = (abs(setting.tinggipipa - distance) / 1000.00);
   return data.tinggi;
 }
-void hw_wdt_disable(){
-  *((volatile uint32_t*) 0x60000900) &= ~(1); // Hardware WDT OFF
+void hw_wdt_disable()
+{
+  *((volatile uint32_t *)0x60000900) &= ~(1); // Hardware WDT OFF
 }
 void ICACHE_RAM_ATTR tipHujan()
 {
@@ -50,23 +45,15 @@ void setup()
   hw_wdt_disable();
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);  
+  digitalWrite(LED_BUILTIN, HIGH);
   Wire.begin();
   sensor.setTimeout(500);
   if (!sensor.init())
   {
     Serial.println("Failed to detect and initialize sensor!");
-    while (1)
-    {
-    }
+    ESP.restart();
   }
   sensor.startContinuous(100);
-  // while (true)
-  // {
-  //   Serial.println(sensor.readRangeContinuousMillimeters()/10.0);
-  //   delay(50);
-  // }
-  
   attachInterrupt(RAIN_GAUGE, tipHujan, FALLING);
   task.attach_ms(1000, calculateReading);
   sim.begin(9600);
@@ -83,7 +70,11 @@ void loop()
     test url = "http://47.241.6.200:3000/tes"
   */
   // ESP.wdtFeed();
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
   String url = "https://us-central1-bisa-b2497.cloudfunctions.net/api/sensor";
+  // Serial.println("tinggi : "+(String)tinggiAir());
   tinggiAir();
   String buffer;
   DynamicJsonDocument doc(JSON_OBJECT_SIZE(4));
@@ -92,6 +83,18 @@ void loop()
   doc["tinggi"] = data.tinggi;
   doc["intensitas"] = data.intensitas;
   serializeJson(doc, buffer);
-  gsm.post(url, buffer, true);
-  delay(40000);
+  if(data.debit >0){
+    gsm.post(url, buffer, true);
+  }
+  int count = 0;
+  while (true)
+  {
+    if (count >= 40)
+      break;
+    Serial.print(".");
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    delay(1000);
+    count++;
+  }
+  digitalWrite(LED_BUILTIN, LOW);
 }
