@@ -3,10 +3,9 @@
 
 float tinggiAir()
 {
-  float distance = sensor.readRangeSingleMillimeters();
-  if (distance > 60000)
-    ESP.restart();
-  data.tinggi = (abs(setting.tinggipipa - distance) / 1000.00);
+  float distance = sensor.readRangeContinuousMillimeters();
+  if(distance < 2000) data.tinggi = (abs(setting.tinggipipa - distance) / 1000.00);
+  // if(data.tinggi > 2) ESP.restart();
   return data.tinggi;
 }
 void hw_wdt_disable()
@@ -45,11 +44,13 @@ void setup()
   hw_wdt_disable();
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(RAIN_GAUGE, INPUT_PULLUP);
   digitalWrite(LED_BUILTIN, HIGH);
-  Wire.begin();
+  Wire.begin(D2, D1);
   sensor.setTimeout(500);
   if (!sensor.init())
   {
+    delay(200);
     Serial.println("Failed to detect and initialize sensor!");
     ESP.restart();
   }
@@ -60,6 +61,7 @@ void setup()
   gsm.log(&Serial);
   gsm.init(&sim, PWR_PIN);
   gsm.initGPRS("3gprs");
+  
 }
 
 void loop()
@@ -80,6 +82,7 @@ void loop()
   doc["tinggi"] = data.tinggi;
   doc["intensitas"] = data.intensitas;
   serializeJson(doc, buffer);
+  Serial.println(buffer);
   if(data.debit >0){
     gsm.post(url, buffer, true);
   }
