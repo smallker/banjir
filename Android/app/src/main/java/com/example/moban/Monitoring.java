@@ -3,6 +3,7 @@ package com.example.moban;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class Monitoring extends AppCompatActivity {
@@ -79,7 +84,8 @@ public class Monitoring extends AppCompatActivity {
                     String debitnya = round(dataSnapshot.child("debit").getValue(Double.class),3).toString() + " m3/s";
                     String hujann = round(dataSnapshot.child("hujan").getValue(Double.class),3).toString() + " mm";
                     String statusnya = dataSnapshot.child("status").getValue().toString();
-                    String jamtanggal = dataSnapshot.child("jamtanggal").getValue().toString();
+                    Long timestamp = dataSnapshot.child("timestamp").getValue(Long.class);
+                    String jamtanggal = getDate(timestamp);
                     String intensitasnya = round(dataSnapshot.child("intensitas").getValue(Double.class),3).toString();
                     ketinggian.setText(banjir);
                     debit.setText(debitnya);
@@ -104,5 +110,11 @@ public class Monitoring extends AppCompatActivity {
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+    private String getDate(long time) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
+        return date;
     }
 }

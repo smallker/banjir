@@ -3,6 +3,7 @@ package com.example.moban;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -19,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Graph extends AppCompatActivity {
@@ -52,7 +55,11 @@ public class Graph extends AppCompatActivity {
                 ArrayList<Entry> yVal = new ArrayList<>();
                 try {
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        if(count == maxdata -1) graphInfo = postSnapshot.child("tanggal").getValue(String.class);
+                        if (count == maxdata - 1){
+//                            graphInfo = postSnapshot.child("tanggal").getValue(String.class);
+                            Long timestamp = postSnapshot.child("timestamp").getValue(Long.class);
+                            graphInfo = getDate(timestamp);
+                        }
                         assert dataChoose != null;
                         Float value = postSnapshot.child(dataChoose).getValue(Float.class);
                         String[] _jam = postSnapshot.child("jam").getValue(String.class).split(":");
@@ -60,11 +67,11 @@ public class Graph extends AppCompatActivity {
                         xVal.add(jam);
                         yVal.add(new Entry(count, value));
                         count++;
-                        Log.d(TAG, "onDataChange: "+yVal);
+                        Log.d(TAG, "onDataChange: " + yVal);
                     }
                     GraphSetting graph = new GraphSetting(chart, graphInfo, xVal, yVal);
                     graph.show();
-                    tvTitle.setText("Grafik "+dataChoose);
+                    tvTitle.setText("Grafik " + dataChoose);
                 } catch (Exception e) {
                     Log.d(TAG, "onDataChange: ");
                     e.printStackTrace();
@@ -75,6 +82,14 @@ public class Graph extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
         });
+    }
+
+    private String getDate(long time) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd-MM-yyyy", cal).toString();
+        return date;
     }
 }
