@@ -44,13 +44,15 @@ exports.timestampNodeMcu = functions.database.ref('/sensor/tembalang/menit/{push
 
 exports.api = functions.https.onRequest(main)
 app.post('/sensor', (req, res) => {
+    let month_arr = ["01","02","03","04","05","06","07","08","09","10","11","12"]
     let debit = req.body.debit
     let hujan = req.body.hujan
     let tinggi = req.body.tinggi
     let intensitas = req.body.intensitas == null ? 0 : req.body.intensitas
     let dateNow = new Date(Date.now())
     let year = dateNow.getFullYear()
-    let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
+    // let month = dateNow.getMonth() < 10 ? "0" + dateNow.getMonth() : dateNow.getMonth()
+    let month = month_arr[dateNow.getMonth()]
     let date = dateNow.getDate() < 10 ? "0" + dateNow.getDate() : dateNow.getDate()
     let hour = dateNow.getHours() < 10 ? "0" + dateNow.getHours() : dateNow.getHours()
     let minute = dateNow.getMinutes() < 10 ? "0" + dateNow.getMinutes() : dateNow.getMinutes()
